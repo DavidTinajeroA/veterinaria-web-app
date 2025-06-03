@@ -55,6 +55,7 @@ class VeterinarioPanelProvider extends PanelProvider
             ->resources([//Los recursos que podrá visualizar el veterinario
                 \App\Filament\Resources\CitasResource::class,
                 \App\Filament\Resources\ConsultasResource::class,
+                \App\Filament\Resources\DatosUsuarioResource::class,
             ]);
     }
 }

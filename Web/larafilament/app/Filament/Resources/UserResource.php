@@ -28,7 +28,7 @@ class UserResource extends Resource
             ->schema([
                 TextInput::make('nombre')->required(),
                 TextInput::make('email')->email()->required()->unique(ignoreRecord:true),
-                TextInput::make('password')->password()->required()
+                TextInput::make('password')->password()->required()->minLength(8)
                 ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
                 ->required(fn(string $context) => $context === 'create')
                 ->dehydrated(fn($state) => filled($state)),

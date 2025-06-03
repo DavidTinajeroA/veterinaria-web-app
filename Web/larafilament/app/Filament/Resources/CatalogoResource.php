@@ -26,7 +26,7 @@ class CatalogoResource extends Resource
     {//Valores modificables al crear un nuevo dato o al modificar uno existente
         return $form
             ->schema([
-                TextInput::make('nombre')->required()->unique(ignoreRecord:true),
+                TextInput::make('nombre')->required()->unique(ignoreRecord:true)->label('Producto'),
                 Select::make('tipo')->required()->options(['Medicamento' => 'Medicamento','Accesorio' => 'Accesorio',])->label('Tipo'),
                 TextInput::make('cantidad')->numeric()->required()->minValue(0),
                 TextInput::make('precio')->numeric()->required()->minValue(0)
@@ -38,7 +38,7 @@ class CatalogoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id_producto')->label('ID'),
-                TextColumn::make('nombre')->label('Nombre'),
+                TextColumn::make('nombre')->label('Producto'),
                 TextColumn::make('tipo')->label('Tipo'),
                 TextColumn::make('cantidad')->label('Cantidad'),
                 TextColumn::make('precio')->label('Precio')

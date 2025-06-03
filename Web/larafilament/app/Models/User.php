@@ -51,11 +51,11 @@ class User extends Authenticatable implements FilamentUser, HasName
             'password' => 'hashed',
         ];
     }
-    public function rol()//Relacion de tabla usuarios a rol, 1 a n
+    public function rol()//Relacion de tabla usuarios a rol
     {
         return $this->belongsTo(Roles::class, 'id_rol');
     }
-    public function datosUsuario()//Relacion de tabla usuarios a datos, 1 a 1
+    public function datosUsuario()//Relacion de tabla usuarios a datos
     {
         return $this->hasOne(DatosUsuario::class, 'id_usuario','id_usuario');
     }

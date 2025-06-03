@@ -53,8 +53,9 @@ class UsuarioPanelProviderPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->resources([//Los recursos que podrá visualizar el usuario
-                \App\Filament\Resources\Userresource::class,
+                \App\Filament\Resources\DatosUsuarioResource::class,
                 \App\Filament\Resources\MascotasResource::class,
+                \App\Filament\Resources\CitasResource::class,
             ]);
     }
 }
