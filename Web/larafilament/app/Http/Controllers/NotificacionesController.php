@@ -14,7 +14,8 @@ class NotificacionesController extends Controller
         $usuario = auth()->user();
         $idUsuario = $usuario->id_usuario;
 
-        //Recupera todos los registros donde el id del usuario esté relacionado
-        return Notificaciones::where('id_usuario', $idUsuario)->get();
-    }
+        //Recupera todos los registros donde el id del usuario esté relacionado con una cita relacionada a la notifiación
+    return Notificaciones::whereHas('cita', function ($query) use ($idUsuario) {
+    $query->where('id_usuario', $idUsuario);
+    })->with('cita.mascota', 'cita.veterinario', 'cita.usuario')->get();    }
 }

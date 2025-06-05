@@ -21,29 +21,19 @@
 
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    required
-                    autofocus
+                <input type="email" name="email" id="email" required autofocus
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-amber-500 focus:border-amber-500"
                 />
             </div>
 
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    required
+                <input type="password" name="password" id="password" required
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-amber-500 focus:border-amber-500"
                 />
             </div>
 
-            <button
-                type="submit"
+            <button type="submit"
                 class="w-full bg-amber-500 text-white font-medium py-2 rounded-md hover:bg-amber-600 transition"
             >
                 Entrar

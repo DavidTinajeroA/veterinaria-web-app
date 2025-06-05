@@ -29,7 +29,7 @@ class MascotasController extends Controller
             'nombre' => 'required|string',
             'especie' => 'required|string',
             'raza' => 'required|string',
-            'edad' => 'required|numeric|min:0',
+            'edad' => 'required|numeric|min:0|max:50',
             'peso' => 'required|numeric|min:0|max:1000'
         ]);
 

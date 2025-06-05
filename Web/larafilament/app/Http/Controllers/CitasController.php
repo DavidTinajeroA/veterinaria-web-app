@@ -61,7 +61,7 @@ class CitasController extends Controller
             $validate = $request->validate([
                 'id_usuario' => 'exists:usuarios,id_usuario',
                 'id_mascota' => 'exists:mascotas,id_mascota',
-                'fecha' => 'fecha',
+                'fecha' => 'date',
             ]);
             $cita->update(array_merge($validate, ['id_veterinario' => $idUsuario]));
             return response()->json($cita);

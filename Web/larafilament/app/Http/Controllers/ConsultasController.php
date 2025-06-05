@@ -36,7 +36,7 @@ class ConsultasController extends Controller
                 'motivo' => 'required|string',
                 'diagnostico' => 'required|string',
                 'tratamiento' => 'required|string',
-                'id_mascota' => 'required|exists:mascotas, id_mascota',
+                'id_mascota' => 'required|exists:mascotas,id_mascota',
             ]);
             $consulta = Consultas::create([
                 'id_usuario' => $idUsuario,
@@ -66,7 +66,7 @@ class ConsultasController extends Controller
                 'motivo' => 'required|string',
                 'diagnostico' => 'required|string',
                 'tratamiento' => 'required|string',
-                'id_mascota' => 'required|exists:mascotas, id_mascota'
+                'id_mascota' => 'required|exists:mascotas,id_mascota'
             ]);
             $consulta->update(array_merge($validate, ['id_usuario' => $idUsuario]));
             return response()->json($consulta);

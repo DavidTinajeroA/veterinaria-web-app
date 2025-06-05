@@ -26,10 +26,8 @@ class NotificacionesResource extends Resource
         return $form
             ->schema([
                 Select::make('id_cita')->relationship('cita','id_cita')->required()->label('ID Cita')
-                    ->getOptionLabelFromRecordUsing(function ($record) {
-                    return $record->usuario->nombre . ' - ' . 
-                           $record->mascota->nombre . ' - ' . 
-                           $record->fecha;
+                ->getOptionLabelFromRecordUsing(function ($record) {
+                return $record->usuario->nombre . ' - ' . $record->mascota->nombre . ' - ' . $record->fecha;
                 }),
             ]);
     }

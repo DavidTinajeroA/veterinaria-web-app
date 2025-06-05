@@ -40,7 +40,7 @@ class DatosUsuarioResource extends Resource
                 ->schema([
                     Select::make('id_usuario')->relationship('usuario', 'nombre', modifyQueryUsing: fn($query)=> 
                     //Solo se muestran los usuarios cuyo rol es usuario o veterinario.
-                    $query->where('id_rol', '!=', 1))->required(),
+                    $query->where('id_rol', '!=', 1))->required()->unique(),
                     
                     TextInput::make('direccion')->required(),
                     TextInput::make('num_telefonico')->required()->numeric()->minLength(10)->maxLength(10)
