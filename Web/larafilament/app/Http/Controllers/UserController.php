@@ -48,4 +48,20 @@ class UserController extends Controller
 
         return response()->json(['mensaje' => 'Sesión cerrada correctamente']);
     }
+    public function store(Request $request)
+    {
+        //Datos a cargar al crear un nuevo usuario
+        $validate = $request->validate([
+            'nombre' => 'required|string',
+            'email' => 'required|email|unique:usuarios,email',
+            'password' => 'required|string|min:8',
+        ]);
+        $usuario = User::create([
+            'nombre' => $validate['nombre'],
+            'email' => $validate['email'],
+            'password' => bcrypt($validate['password']),
+            'id_rol' => 3  
+        ]);
+        return response()->json($usuario, 201);
+    }
 }

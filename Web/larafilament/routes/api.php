@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 //Rutas a ser accedidas desde la app móvil y las acciones que ejecuta cada una
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
+Route::post('/registrar', [UserController::class, 'store']);
 
 Route::middleware('auth:sanctum')->get('/catalogo',[CatalogoController::class, 'index']);
 
