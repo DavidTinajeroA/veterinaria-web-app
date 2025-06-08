@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -15,70 +17,90 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends Activity {
+    //Campos de entrada y botones de la pantalla de login
     EditText emailField, passwordField;
     Button loginButton, registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Iniciar la main activity que es el login
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        //Variables necesarias recuperadas del xml
+        //Enlazar vistas de la interfaz con variables Java
         emailField = findViewById(R.id.email);
         passwordField = findViewById(R.id.password);
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.registro);
 
-        //Ejecutar la el metodo para el login al hacer click al botón
+        //Acción al presionar el botón de login
         loginButton.setOnClickListener(v -> loginUser());
+
+        //Acción al presionar el botón de registro
         registerButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RegistrarActivity.class);
             startActivity(intent);
         });
+
+        //Verificar si hay una sesión previamente guardada en SQLite
+        DBHelper dbHelper = new DBHelper(this);
+        int savedRol = dbHelper.obtenerRol();
+        String savedToken = dbHelper.obtenerToken();
+
+        //Si hay token, redirigir según el rol
+        if (savedToken != null && !savedToken.isEmpty()) {
+            if (savedRol == 2) {
+                startActivity(new Intent(MainActivity.this, HomeVeterinarioActivity.class));
+                finish();
+            } else if (savedRol == 3) {
+                startActivity(new Intent(MainActivity.this, HomeUsuarioActivity.class));
+                finish();
+            }
+        }
     }
 
-    //Metodo de login que realiza la solicitud al API para comprobar las credenciales
-    //Si es exitoso redirige al usuario según su rol a la pantalla correspondiente
+    //Método para iniciar sesión
     private void loginUser() {
-
-        //Recuperar los campos y checar que el llenado cumpla con restricciones básicas
+        //Obtener los datos del formulario
         String email = emailField.getText().toString().trim();
         String password = passwordField.getText().toString().trim();
+
+        //Validaciones básicas del formulario
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(MainActivity.this, "Por favor llena ambos campos", Toast.LENGTH_SHORT).show();
             return;
         }
+
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(MainActivity.this, "Correo no válido", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //Limpiar al enviar login
+        //Limpiar el campo de contraseña por seguridad
         passwordField.post(() -> passwordField.setText(""));
 
+        //Ejecutar la solicitud HTTP en un hilo secundario
         new Thread(() -> {
             try {
-                //Conexión a la API local
+                //Configurar la conexión HTTP al backend
                 URL url = new URL("http://10.0.2.2:8000/api/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
 
-                //Objeto JSON con las credenciales
+                //Crear el cuerpo del JSON con email y contraseña
                 JSONObject json = new JSONObject();
                 json.put("email", email);
                 json.put("password", password);
 
-                //Enviar el JSON
                 OutputStream os = conn.getOutputStream();
                 os.write(json.toString().getBytes(StandardCharsets.UTF_8));
                 os.close();
 
-                //Checar respuesta, si es exitosa se guarda como un string
                 int responseCode = conn.getResponseCode();
+
                 if (responseCode == 200) {
+                    //Leer y procesar la respuesta del servidor
                     BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     StringBuilder response = new StringBuilder();
                     String line;
@@ -87,19 +109,23 @@ public class MainActivity extends Activity {
                     }
                     in.close();
 
-                    //Convertir el string a JSON y recuperar el rol del usuario logeado
+                    //Extraer el token y los datos del usuario
                     JSONObject jsonResponse = new JSONObject(response.toString());
+                    String token = jsonResponse.getString("token");
                     JSONObject user = jsonResponse.getJSONObject("user");
                     int idRol = user.getInt("id_rol");
 
-                    //Cambio de pantalla según el rol
+                    //Guardar el token y el rol en SQLite
+                    DBHelper dbHelper = new DBHelper(MainActivity.this);
+                    dbHelper.guardarSesion(idRol, token);
+
+                    //Redirigir al usuario al home según su rol
                     runOnUiThread(() -> {
                         Toast.makeText(MainActivity.this, "Login exitoso", Toast.LENGTH_SHORT).show();
                         Intent intent;
-                        //Si el rol corresponde al de veterinario manda a la pantalla principal de veterinario
                         if (idRol == 2) {
                             intent = new Intent(MainActivity.this, HomeVeterinarioActivity.class);
-                        } else if (idRol == 3) { //Si el rol corresponde al de usuario manda a la pantalla principal de usuario
+                        } else if (idRol == 3) {
                             intent = new Intent(MainActivity.this, HomeUsuarioActivity.class);
                         } else {
                             return;
@@ -107,9 +133,10 @@ public class MainActivity extends Activity {
                         startActivity(intent);
                         finish();
                     });
-                } else { //Si la respuesta no es exitosa manda error
+                } else {
                     runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error al intentar iniciar sesión", Toast.LENGTH_SHORT).show());
                 }
+
                 conn.disconnect();
             } catch (Exception e) {
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());

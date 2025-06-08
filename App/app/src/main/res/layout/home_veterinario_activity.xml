@@ -2,6 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/home">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp"
+        android:layout_marginBottom="25dp">
+
+        <Button
+            android:id="@+id/cita"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/cita"
+            android:layout_marginHorizontal="25dp"/>
+        <Button
+            android:id="@+id/consulta"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/consulta"
+            android:layout_marginHorizontal="25dp"/>
+        <Button
+            android:id="@+id/notificacion"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/notificacion"
+            android:layout_marginHorizontal="25dp"/>
+        <Button
+            android:id="@+id/usuario"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/usuario"
+            android:layout_marginHorizontal="25dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

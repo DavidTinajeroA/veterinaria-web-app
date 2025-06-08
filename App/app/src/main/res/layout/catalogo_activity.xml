@@ -3,12 +3,50 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home">
+    android:background="@drawable/fondo">
 
-    <View
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Catálogo"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="46sp"
+        android:textColor="#000000"
+        android:layout_marginTop="50dp" />
+
+    <EditText
+        android:id="@+id/busqueda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Buscar producto..."
+        android:padding="15dp"
+        android:textSize="18sp"
+        android:background="@drawable/borde_catalogo"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginHorizontal="50dp"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@android:color/transparent">
+
+        <GridLayout
+            android:id="@+id/gridCatalogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:alignmentMode="alignMargins"
+            android:columnOrderPreserved="false"
+            android:useDefaultMargins="true"/>
+    </ScrollView>
+
+    <!-- Barra inferior con botones -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +54,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:layout_marginBottom="25dp">
+
         <Button
             android:id="@+id/catalogo"
             android:layout_width="60dp"
@@ -47,7 +86,6 @@
             android:layout_height="60dp"
             android:background="@drawable/usuario"
             android:layout_marginHorizontal="10dp"/>
-
     </LinearLayout>
 
 </LinearLayout>
