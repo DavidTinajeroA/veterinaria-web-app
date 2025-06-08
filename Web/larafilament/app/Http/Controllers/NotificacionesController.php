@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Notificaciones;
 
 class NotificacionesController extends Controller
@@ -14,8 +15,32 @@ class NotificacionesController extends Controller
         $usuario = auth()->user();
         $idUsuario = $usuario->id_usuario;
 
+
+        // Eliminar notificaciones de citas que ya pasaron
+        Notificaciones::whereHas('cita', function ($query) use ($idUsuario) {
+            $query->where('id_usuario', $idUsuario)
+                ->where('fecha', '<', now());
+        })->delete();
+        
+        //Variables para mostrar notifiaciones relevantes basado en fecha 
+        $hoy = Carbon::now()->startOfDay();
+        //Plazo definido de notifiaciones a mostrar en este caso 7 días
+        $plazo = Carbon::now()->addDays(7)->endOfDay();
+
         //Recupera todos los registros donde el id del usuario esté relacionado con una cita relacionada a la notifiación
-    return Notificaciones::whereHas('cita', function ($query) use ($idUsuario) {
-    $query->where('id_usuario', $idUsuario);
-    })->with('cita.mascota', 'cita.veterinario', 'cita.usuario')->get();    }
+        $notificaciones = Notificaciones::whereHas('cita', function ($query) use ($idUsuario, $hoy, $plazo) {
+        //Se muestran las notificaciones cuya cita sucedera entre hoy y el plazo dado 
+        $query->where('id_usuario', $idUsuario)->whereBetween('fecha', [$hoy, $plazo]);
+        })->with('cita.mascota', 'cita.veterinario', 'cita.usuario')->get();   
+
+            //Retorna los datos a mostrar en la app y el texto que los contiene
+            return $notificaciones->map(function ($notificacion) {
+            return [
+                'id' => $notificacion->id_notificacion,
+                'titulo' => "Cita con: \n"  . $notificacion->cita->veterinario->nombre,
+                'mensaje' => "\nTienes una cita el: \n\n"  . $notificacion->cita->fecha . 
+                            "\n\nPara tú mascota: \n\n" . $notificacion->cita->mascota->nombre,               
+            ];
+        });
+    }
 }

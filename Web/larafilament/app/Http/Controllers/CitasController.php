@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Filament\facades\Filament;
 use App\Models\Citas;
+use App\Models\Notificaciones;
 
 class CitasController extends Controller
 {
@@ -42,6 +43,10 @@ class CitasController extends Controller
                 'id_usuario' => $validate['id_usuario'],
                 'id_mascota' => $validate['id_mascota'],
                 'fecha' => $validate['fecha'],
+            ]);
+            //Crear notificación de la cita generada
+            Notificaciones::create([
+                'id_cita' => $cita->id_cita,
             ]);
             return response()->json($cita, 201);
         }else{//Si no es veterinario no permite el crear una nueva
