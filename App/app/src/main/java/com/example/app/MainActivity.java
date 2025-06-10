@@ -58,7 +58,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    //Método para iniciar sesión
     private void loginUser() {
         //Obtener los datos del formulario
         String email = emailField.getText().toString().trim();
@@ -114,10 +113,11 @@ public class MainActivity extends Activity {
                     String token = jsonResponse.getString("token");
                     JSONObject user = jsonResponse.getJSONObject("user");
                     int idRol = user.getInt("id_rol");
+                    String nombre = user.getString("nombre");
 
-                    //Guardar el token y el rol en SQLite
+                    //Guardar el token, rol y nombre en SQLite
                     DBHelper dbHelper = new DBHelper(MainActivity.this);
-                    dbHelper.guardarSesion(idRol, token);
+                    dbHelper.guardarSesion(idRol, token, nombre);
 
                     //Redirigir al usuario al home según su rol
                     runOnUiThread(() -> {

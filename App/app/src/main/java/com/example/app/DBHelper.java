@@ -10,7 +10,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //Nombre y versión de la base de datos
     private static final String DATABASE_NAME = "SesionDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Crear tabla de sesión con id, rol y token
-        db.execSQL("CREATE TABLE sesion (id INTEGER PRIMARY KEY, id_rol INTEGER, token TEXT)");
+        db.execSQL("CREATE TABLE sesion (id INTEGER PRIMARY KEY, id_rol INTEGER, token TEXT, nombre TEXT)");
     }
 
     @Override
@@ -30,12 +30,13 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Guarda la sesión completa con rol y token
-    public void guardarSesion(int idRol, String token) {
+    public void guardarSesion(int idRol, String token, String nombre) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM sesion"); //Solo una sesión activa
         ContentValues values = new ContentValues();
         values.put("id_rol", idRol);
         values.put("token", token);
+        values.put("nombre", nombre);
         db.insert("sesion", null, values);
         db.close();
     }
@@ -64,6 +65,18 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return token;
+    }
+    //Recuperar el nombre del usuario logeado
+    public String obtenerNombreUsuario() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT nombre FROM sesion LIMIT 1", null);
+        String nombre = "Usuario";
+        if (cursor.moveToFirst()) {
+            nombre = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+        return nombre;
     }
 
     //Elimina la sesión guardada

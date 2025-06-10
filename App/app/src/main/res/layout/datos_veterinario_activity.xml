@@ -6,7 +6,6 @@
     android:background="@drawable/fondo"
     android:gravity="center">
 
-    <!-- Contenido con Scroll y estilo -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -31,6 +30,15 @@
                     android:layout_height="200dp"
                     android:src="@drawable/foto"
                     android:layout_marginBottom="24dp"/>
+
+                <TextView
+                    android:id="@+id/nombreUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textSize="23sp"
+                    android:layout_marginBottom="20dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,12 +68,33 @@
                     android:padding="12dp"
                     android:layout_marginBottom="24dp"/>
 
-                <Button
-                    android:id="@+id/btnEditarUsuario"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/subir"
-                    android:layout_marginBottom="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <Button
+                        android:id="@+id/btnEditarUsuario"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/subir"
+                        android:layout_gravity="start"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="3" />
+
+                    <Button
+                        android:id="@+id/btnLogout"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/logout"
+                        android:layout_gravity="end"/>
+                </LinearLayout>
 
             </LinearLayout>
         </FrameLayout>

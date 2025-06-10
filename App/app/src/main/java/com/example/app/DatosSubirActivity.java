@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -63,6 +64,60 @@ public class DatosSubirActivity extends Activity {
             btnCatalogo.setOnClickListener(view -> startActivity(new Intent(DatosSubirActivity.this, CatalogoActivity.class)));
             btnMascota.setOnClickListener(view -> startActivity(new Intent(DatosSubirActivity.this, MascotaActivity.class)));
         }
+        //Mostrar el nombre del usuario logeado recuperado de la BD
+        TextView textNombreUsuario = findViewById(R.id.nombreUsuario);
+        DBHelper dbHelperNombre = new DBHelper(this);
+        String nombreUsuario = dbHelperNombre.obtenerNombreUsuario();
+        dbHelperNombre.close();
+        textNombreUsuario.setText(nombreUsuario);
+
+        //Botón logout para cerrar sesión
+        Button btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(view -> {
+            String url = "http://10.0.2.2:8000/api/logout";
+
+            JsonObjectRequest logoutRequest = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    null,
+                    response -> {
+                        //Borrar datos locales y redirigir a login
+                        DBHelper dbHelper1 = new DBHelper(DatosSubirActivity.this);
+                        dbHelper1.limpiarSesion(); //metodo que elimina los datos del usuario en la BD
+                        dbHelper1.close();
+
+                        Intent intent = new Intent(DatosSubirActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    },
+                    error -> {
+                        //Borrar datos locales y redirigir a login
+                        DBHelper dbHelper1 = new DBHelper(DatosSubirActivity.this);
+                        dbHelper1.limpiarSesion(); //metodo que elimina los datos del usuario en la BD
+                        dbHelper1.close();
+
+                        Intent intent = new Intent(DatosSubirActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
+                }
+            };
+
+            //Evitar reintentos automáticos para prevenir solicitudes duplicadas
+            logoutRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+
+            Volley.newRequestQueue(DatosSubirActivity.this).add(logoutRequest);
+        });
 
         //Configurar acción del botón para subir los datos vía POST
         btnSubir.setOnClickListener(v -> {

@@ -12,6 +12,7 @@ class DatosUsuarioController extends Controller
         //Variables recuperadas del usuario logeado
         $usuario = auth()->user();
         $idUsuario = $usuario->id_usuario;
+        $nombreUsuario = $usuario->nombre;
         //Recupera el registro que pertenece al usuario logeado
         return DatosUsuario::with('usuario')->where('id_usuario', $idUsuario)->get();
     }

@@ -5,10 +5,43 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo">
 
-    <View
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Consultas"
+        android:textSize="46sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/busquedaConsultas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Buscar por nombre de mascota"
+        android:padding="12dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/borde_catalogo"
+        android:textColor="#000000"
+        android:textColorHint="#888"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <GridLayout
+            android:id="@+id/contenedorConsultas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp"/>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,25 +57,26 @@
             android:layout_height="60dp"
             android:background="@drawable/cita"
             android:layout_marginHorizontal="25dp"/>
+
         <Button
             android:id="@+id/consulta"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/consulta"
-            android:layout_marginHorizontal="20dp"/>
+            android:layout_marginHorizontal="25dp"/>
+
         <Button
             android:id="@+id/notificacion"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/notificacion"
             android:layout_marginHorizontal="25dp"/>
+
         <Button
             android:id="@+id/usuario"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/usuario"
             android:layout_marginHorizontal="25dp"/>
-
     </LinearLayout>
-
 </LinearLayout>

@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 import java.util.HashMap;
@@ -88,7 +91,7 @@ public class DatosActivity extends Activity {
             }
 
             //Crear solicitud PUT con autorización y JSON en body
-            com.android.volley.toolbox.JsonObjectRequest putRequest = new com.android.volley.toolbox.JsonObjectRequest(
+            JsonObjectRequest putRequest = new JsonObjectRequest(
                     Request.Method.PUT,
                     url,
                     putData,
@@ -118,8 +121,61 @@ public class DatosActivity extends Activity {
                 }
             };
 
+            //Evitar reintentos automáticos para prevenir solicitudes duplicadas
+            putRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+
             //Encolar la petición PUT en la cola de Volley
             Volley.newRequestQueue(DatosActivity.this).add(putRequest);
+        });
+
+        //Botón logout para cerrar sesion
+        Button btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(view -> {
+            String url = "http://10.0.2.2:8000/api/logout";
+
+            JsonObjectRequest logoutRequest = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    null,
+                    response -> {
+                        //Borrar datos locales y redirigir a login
+                        DBHelper dbHelper1 = new DBHelper(DatosActivity.this);
+                        dbHelper1.limpiarSesion(); //metodo que elimina los datos del usuario en la BD
+                        dbHelper1.close();
+
+                        Intent intent = new Intent(DatosActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    },
+                    error -> {
+                        //Borrar datos locales y redirigir a login
+                        DBHelper dbHelper1 = new DBHelper(DatosActivity.this);
+                        dbHelper1.limpiarSesion(); //metodo que elimina los datos del usuario en la BD
+                        dbHelper1.close();
+
+                        Intent intent = new Intent(DatosActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
+                }
+            };
+
+            //Evitar reintentos automáticos para prevenir solicitudes duplicadas
+            logoutRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+
+            Volley.newRequestQueue(DatosActivity.this).add(logoutRequest);
         });
 
         //Cargar datos actuales del usuario para mostrar en la UI
@@ -151,6 +207,14 @@ public class DatosActivity extends Activity {
                             Telefono.setText(datos.getString("num_telefonico"));
                             //Mostrar botón editar
                             btnEditar.setVisibility(View.VISIBLE);
+
+                            //Mostrar el nombre del usuario logeado recuperado de la BD
+                            TextView textNombreUsuario = findViewById(R.id.nombreUsuario);
+                            DBHelper dbHelper = new DBHelper(DatosActivity.this);
+                            String nombreUsuario = dbHelper.obtenerNombreUsuario();
+                            dbHelper.close();
+                            textNombreUsuario.setText(nombreUsuario);
+
                         } catch (Exception e) {
                             e.printStackTrace();
                             Toast.makeText(DatosActivity.this, "Error al parsear datos", Toast.LENGTH_SHORT).show();

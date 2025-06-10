@@ -46,7 +46,7 @@ class UserController extends Controller
         //Eliminar los tokens del usuario autenticado
         $request->user()->tokens()->delete();
 
-        return response()->json(['mensaje' => 'Sesión cerrada correctamente']);
+        return response()->json(['mensaje' => 'Sesión cerrada correctamente'], 200);
     }
     public function store(Request $request)
     {

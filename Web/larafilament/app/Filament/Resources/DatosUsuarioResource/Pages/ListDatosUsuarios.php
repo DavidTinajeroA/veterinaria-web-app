@@ -12,6 +12,7 @@ class ListDatosUsuarios extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        
         //Se recupera el valor del panel y si no es usuario no se muestra el botón de crear
         $panel = \Filament\Facades\Filament::getCurrentPanel()?->getId();
         if($panel !== 'admin'){

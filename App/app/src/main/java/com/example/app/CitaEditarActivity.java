@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class CitaEditarActivity extends Activity {
 
-    EditText etFechaHora, etUsuarioNombre, etMascotaNombre;
+    EditText FechaHora, UsuarioNombre, MascotaNombre;
     String token;
     int idCita;
     int idUsuario;
@@ -31,18 +31,18 @@ public class CitaEditarActivity extends Activity {
         setContentView(R.layout.cita_editar_activity);
 
         //Referencias a los EditText del layout
-        etFechaHora=findViewById(R.id.fecha);
-        etUsuarioNombre=findViewById(R.id.usuario);
-        etMascotaNombre=findViewById(R.id.mascota);
+        FechaHora=findViewById(R.id.fecha);
+        UsuarioNombre=findViewById(R.id.usuario);
+        MascotaNombre=findViewById(R.id.mascota);
 
         //Usuario y mascota son solo para mostrar, no editables
-        etUsuarioNombre.setEnabled(false);
-        etMascotaNombre.setEnabled(false);
+        UsuarioNombre.setEnabled(false);
+        MascotaNombre.setEnabled(false);
 
         //EditText fecha y hora no editable manualmente, solo por selector
-        etFechaHora.setFocusable(false);
-        etFechaHora.setClickable(true);
-        etFechaHora.setOnClickListener(v->mostrarSelectorFechaHora());
+        FechaHora.setFocusable(false);
+        FechaHora.setClickable(true);
+        FechaHora.setOnClickListener(v->mostrarSelectorFechaHora());
 
         //Obtener token de SQLite para autorización
         DBHelper dbHelper=new DBHelper(this);
@@ -62,13 +62,13 @@ public class CitaEditarActivity extends Activity {
 
             //Mostrar fecha y hora actual de la cita en el EditText
             String fechaHora=cita.getString("fecha"); //formato "YYYY-MM-DD HH:mm:ss"
-            etFechaHora.setText(fechaHora);
+            FechaHora.setText(fechaHora);
 
             //Mostrar nombres de usuario y mascota en EditTexts correspondientes
             String nombreUsuario=cita.getJSONObject("usuario").getString("nombre");
             String nombreMascota=cita.getJSONObject("mascota").getString("nombre");
-            etUsuarioNombre.setText(nombreUsuario);
-            etMascotaNombre.setText(nombreMascota);
+            UsuarioNombre.setText(nombreUsuario);
+            MascotaNombre.setText(nombreMascota);
 
         }catch(Exception e){
             e.printStackTrace();
@@ -90,7 +90,7 @@ public class CitaEditarActivity extends Activity {
 
         //Intentar cargar fecha y hora actuales del EditText para iniciar selector con esos valores
         try{
-            String fechaHoraStr=etFechaHora.getText().toString();
+            String fechaHoraStr=FechaHora.getText().toString();
             String[] partes=fechaHoraStr.split(" ");
             String[] fechaPartes=partes[0].split("-");
 
@@ -125,7 +125,7 @@ public class CitaEditarActivity extends Activity {
                 //Construir cadena fecha y hora seleccionadas para mostrar en EditText
                 String fechaHoraSeleccionada=String.format("%04d-%02d-%02d %02d:%02d:00",
                         year,month+1,dayOfMonth,selectedHour,selectedMinute);
-                etFechaHora.setText(fechaHoraSeleccionada);
+                FechaHora.setText(fechaHoraSeleccionada);
             },hora,minuto,true);
 
             timePickerDialog.show();
@@ -163,7 +163,7 @@ public class CitaEditarActivity extends Activity {
                 //Parámetros para la actualización: metodo PUT simulado y datos de la cita
                 Map<String,String> params=new HashMap<>();
                 params.put("_method","PUT"); //Laravel interpreta este para PUT
-                params.put("fecha",etFechaHora.getText().toString());
+                params.put("fecha",FechaHora.getText().toString());
                 params.put("id_usuario",String.valueOf(idUsuario));
                 params.put("id_mascota",String.valueOf(idMascota));
                 return params;

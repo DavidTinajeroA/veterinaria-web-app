@@ -110,7 +110,7 @@ public class NotificacionActivity extends Activity {
             //Contenedor vertical principal de las notificaciones
             LinearLayout contenedor = new LinearLayout(this);
             contenedor.setOrientation(LinearLayout.VERTICAL);
-            contenedor.setPadding(30, 30, 30, 30);
+            contenedor.setPadding(20, 15, 20, 15);
             contenedor.setGravity(Gravity.CENTER);
             contenedor.setBackgroundResource(R.drawable.borde_notificacion);
 
@@ -120,7 +120,7 @@ public class NotificacionActivity extends Activity {
             tituloView.setTextSize(25);
             tituloView.setGravity(Gravity.CENTER);
             tituloView.setTextColor(getColor(android.R.color.black));
-            tituloView.setPadding(0, 0, 0, 15);
+            tituloView.setPadding(0, 0, 0, 5);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 tituloView.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
             }
@@ -137,8 +137,9 @@ public class NotificacionActivity extends Activity {
             contenedor.addView(mensajeView);
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.height = 1200;
             params.width = GridLayout.LayoutParams.MATCH_PARENT;
-            params.setMargins(100, 20, 100, 20);
+            params.setMargins(100, 10, 100, 0);
             contenedor.setLayoutParams(params);
 
             //Agregar animaciones

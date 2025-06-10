@@ -127,16 +127,23 @@ public class CitaActivity extends Activity {
             String fecha=cita.getString("fecha");
             String nombreMascota=cita.getJSONObject("mascota").getString("nombre");
             String nombreUsuario=cita.getJSONObject("usuario").getString("nombre");
+            String nombreVeterinario=cita.getJSONObject("veterinario").getString("nombre");
 
             //Crear TextView para mostrar los datos de la cita
             TextView txt=new TextView(this);
-            txt.setText("Fecha: "+fecha+
-                    "\nMascota: "+nombreMascota+
-                    "\nUsuario: "+nombreUsuario);
-            txt.setTextSize(18);
+            if(idRol==2) {
+                txt.setText("Fecha: " + fecha +
+                        "\nMascota: " + nombreMascota +
+                        "\nDueño: " + nombreUsuario);
+            }else{
+                txt.setText("Fecha: " + fecha +
+                        "\nMascota: " + nombreMascota +
+                        "\nVeterinario: " + nombreVeterinario);
+            }
+            txt.setTextSize(25);
             txt.setTextColor(getColor(android.R.color.black));
             txt.setGravity(Gravity.CENTER);
-            txt.setPadding(0,0,0,20);
+            txt.setPadding(0,0,0,50);
 
             //Ajustar tamaño de texto automáticamente en versiones recientes
             if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
