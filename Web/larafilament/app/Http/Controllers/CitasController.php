@@ -24,35 +24,6 @@ class CitasController extends Controller
             return Citas::with('usuario', 'veterinario', 'mascota')->where('id_veterinario', $idUsuario)->get();
         };
     }
-    public function store(Request $request)
-    {
-        //Variables recuperadas del usuario logeado
-        $usuario = auth()->user();
-        $idRol = $usuario->id_rol;
-        $idUsuario = $usuario->id_usuario;
-        
-        //Si el rol del usuario logeado es veterinario permite crear una nueva cita
-        if ($idRol === 2) {
-            $validate = $request->validate([
-                'id_usuario' => 'required|exists:usuarios,id_usuario',
-                'id_mascota' => 'required|exists:mascotas,id_mascota',
-                'fecha' => 'required|date',
-            ]);
-            $cita = Citas::create([
-                'id_veterinario' => $idUsuario,
-                'id_usuario' => $validate['id_usuario'],
-                'id_mascota' => $validate['id_mascota'],
-                'fecha' => $validate['fecha'],
-            ]);
-            //Crear notificación de la cita generada
-            Notificaciones::create([
-                'id_cita' => $cita->id_cita,
-            ]);
-            return response()->json($cita, 201);
-        }else{//Si no es veterinario no permite el crear una nueva
-            return response()->json(['error' => 'Acceso no permitido'], 403);
-        };
-    }
     public function update(Request $request, string $id)
     {
         //Variables recuperadas del usuario logeado

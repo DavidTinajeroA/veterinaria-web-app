@@ -63,10 +63,10 @@ class MascotasController extends Controller
             'especie' => 'required|string',
             'raza' => 'required|string',
             'edad' => 'required|numeric|min:0',
-            'peso' => 'required|numeric|min:0|max:1000'
+            'peso' => 'required|numeric|min:0|max:200'
         ]);
 
         $mascota->update($validate);
-        return response()->json($mascota);
+        return response()->json(data: $mascota);
     }
 }

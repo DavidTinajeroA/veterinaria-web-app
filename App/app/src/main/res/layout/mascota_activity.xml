@@ -3,12 +3,48 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo">
+    android:background="@drawable/fondo"
+    android:gravity="center">
 
-    <View
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mascotas"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="46sp"
+        android:textColor="#000000"
+        android:layout_marginTop="50dp" />
+
+    <Button
+        android:id="@+id/btnAgregar"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="+"
+        android:background="#FFEA00"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:paddingLeft="70dp"
+        android:paddingRight="70dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <GridLayout
+                android:id="@+id/layoutMascotas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="1"
+                android:padding="16dp" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,32 +59,31 @@
             android:layout_height="60dp"
             android:background="@drawable/catalogo"
             android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="4dp"/>
+            android:layout_marginBottom="4dp" />
         <Button
             android:id="@+id/cita"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/cita"
-            android:layout_marginHorizontal="10dp"/>
+            android:layout_marginHorizontal="10dp" />
         <Button
             android:id="@+id/mascota"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/mascota"
-            android:layout_marginHorizontal="10dp"/>
+            android:layout_marginHorizontal="10dp" />
         <Button
             android:id="@+id/notificacion"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/notificacion"
-            android:layout_marginHorizontal="10dp"/>
+            android:layout_marginHorizontal="10dp" />
         <Button
             android:id="@+id/usuario"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/usuario"
-            android:layout_marginHorizontal="10dp"/>
-
+            android:layout_marginHorizontal="10dp" />
     </LinearLayout>
 
 </LinearLayout>

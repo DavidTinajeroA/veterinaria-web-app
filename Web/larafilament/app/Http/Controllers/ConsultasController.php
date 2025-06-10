@@ -22,35 +22,6 @@ class ConsultasController extends Controller
             return response()->json(['error' => 'Acceso no permitido'], 403);
         };
     }
-    public function store(Request $request)
-    {
-        //Variables recuperadas del usuario logeado
-        $usuario = auth()->user();
-        $idRol = $usuario->id_rol;
-        $idUsuario = $usuario->id_usuario;
-        
-        //Si el rol del usuario logeado es veterinario permite crear una nueva consulta
-        if ($idRol === 2) {
-            $validate = $request->validate([
-                'fecha' => 'required|date',
-                'motivo' => 'required|string',
-                'diagnostico' => 'required|string',
-                'tratamiento' => 'required|string',
-                'id_mascota' => 'required|exists:mascotas,id_mascota',
-            ]);
-            $consulta = Consultas::create([
-                'id_usuario' => $idUsuario,
-                'motivo' => $validate['motivo'],
-                'fecha' => $validate['fecha'],
-                'diagnostico' => $validate['diagnostico'],
-                'tratamiento' => $validate['tratamiento'],
-                'id_mascota' => $validate['id_mascota'],
-            ]);
-            return response()->json($consulta, 201);
-        }else{//Si no es veterinario no permite el crear una nueva
-            return response()->json(['error' => 'Acceso no permitido'], 403);
-        };
-    }
     public function update(Request $request, string $id)
     {
         //Variables recuperadas del usuario logeado

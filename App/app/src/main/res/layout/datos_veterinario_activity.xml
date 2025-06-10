@@ -3,12 +3,74 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo">
+    android:background="@drawable/fondo"
+    android:gravity="center">
 
-    <View
+    <!-- Contenido con Scroll y estilo -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="24dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/borde_layout"
+                android:padding="24dp">
+
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/foto"
+                    android:layout_marginBottom="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dirección:"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+                <EditText
+                    android:id="@+id/direccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/borde_edit_text"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Número Telefónico:"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+                <EditText
+                    android:id="@+id/telefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/borde_edit_text"
+                    android:padding="12dp"
+                    android:layout_marginBottom="24dp"/>
+
+                <Button
+                    android:id="@+id/btnEditarUsuario"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/subir"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +103,6 @@
             android:layout_height="60dp"
             android:background="@drawable/usuario"
             android:layout_marginHorizontal="25dp"/>
-
     </LinearLayout>
 
 </LinearLayout>

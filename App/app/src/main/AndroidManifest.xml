@@ -20,9 +20,13 @@
         <activity android:name=".RegistrarActivity"/>
         <activity android:name=".CatalogoActivity"/>
         <activity android:name=".CitaActivity"/>
+        <activity android:name=".CitaEditarActivity"/>
         <activity android:name=".ConsultaActivity"/>
         <activity android:name=".DatosActivity"/>
+        <activity android:name=".DatosSubirActivity"/>
         <activity android:name=".MascotaActivity"/>
+        <activity android:name=".MascotaEditarActivity"/>
+        <activity android:name=".MascotaAgregarActivity"/>
         <activity android:name=".NotificacionActivity"/>
         <activity android:name=".HomeVeterinarioActivity"/>
         <activity android:name=".HomeUsuarioActivity"/>
