@@ -48,6 +48,8 @@ public class RegistrarActivity extends Activity {
             Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
+        //Limpiar el campo de contraseña por seguridad
+        passwordField.post(() -> passwordField.setText(""));
 
         new Thread(() -> {
             try {

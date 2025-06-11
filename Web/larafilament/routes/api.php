@@ -9,6 +9,7 @@ use App\Http\Controllers\DatosUsuarioController;
 use App\Http\Controllers\MascotasController;
 use App\Http\Controllers\NotificacionesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RecuperarController;
 
 //Rutas a ser accedidas desde la app móvil y las acciones que ejecuta cada una
 Route::post('/login', [UserController::class, 'login']);
@@ -34,3 +35,5 @@ Route::middleware('auth:sanctum')->post('/mascotas',[MascotasController::class, 
 Route::middleware('auth:sanctum')->put('/mascotas/{id}',[MascotasController::class, 'update']);
 
 Route::middleware('auth:sanctum')->get('/notificaciones',[NotificacionesController::class, 'index']);
+
+Route::post('/recuperar', [RecuperarController::class, 'enviarCorreo']);

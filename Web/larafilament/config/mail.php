@@ -37,6 +37,10 @@ return [
 
     'mailers' => [
 
+        'sendgrid' => [
+            'transport' => 'sendgrid',
+        ],
+
         'smtp' => [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),

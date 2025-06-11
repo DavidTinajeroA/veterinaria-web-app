@@ -32,3 +32,30 @@ Route::post('/login', function (Request $request) {
 Route::get('/', function () {
     return redirect('/login');
 });
+
+Route::get('/password/reset/{token}', function ($token) {
+    return view('auth.reset', ['token' => $token]);
+})->name('password.reset');
+
+Route::post('/password/reset', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password),
+            ])->save();
+        }
+    );
+
+    if ($status == Password::PASSWORD_RESET) {
+        return redirect('/login')->with('status', __($status));
+    } else {
+        return back()->withErrors(['email' => __($status)]);
+    }
+})->name('password.update');

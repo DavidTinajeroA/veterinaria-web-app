@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 public class MainActivity extends Activity {
     //Campos de entrada y botones de la pantalla de login
     EditText emailField, passwordField;
-    Button loginButton, registerButton;
+    Button loginButton, registerButton, recuperarButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
         passwordField = findViewById(R.id.password);
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.registro);
+        recuperarButton = findViewById(R.id.recuperar);
 
         //Acción al presionar el botón de login
         loginButton.setOnClickListener(v -> loginUser());
@@ -40,6 +41,9 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MainActivity.this, RegistrarActivity.class);
             startActivity(intent);
         });
+
+        //Recuperar contraseña enviando el correo
+        recuperarButton.setOnClickListener(v -> enviarSolicitudRecuperacion());
 
         //Verificar si hay una sesión previamente guardada en SQLite
         DBHelper dbHelper = new DBHelper(this);
@@ -135,6 +139,61 @@ public class MainActivity extends Activity {
                     });
                 } else {
                     runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error al intentar iniciar sesión", Toast.LENGTH_SHORT).show());
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            }
+        }).start();
+    }
+    private void enviarSolicitudRecuperacion() {
+        String email = emailField.getText().toString().trim();
+
+        if (email.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Por favor ingresa tu correo electrónico", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(MainActivity.this, "Correo no válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://10.0.2.2:8000/api/recuperar"); // URL de tu API para recuperar contraseña
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+
+                JSONObject json = new JSONObject();
+                json.put("email", email);
+
+                OutputStream os = conn.getOutputStream();
+                os.write(json.toString().getBytes(StandardCharsets.UTF_8));
+                os.close();
+
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == 200) {
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Correo de recuperación enviado", Toast.LENGTH_LONG).show());
+                } else {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    in.close();
+
+                    String errorMsg = "Error";
+                    try {
+                        JSONObject errJson = new JSONObject(response.toString());
+                        errorMsg = errJson.optString("message", errorMsg);
+                    } catch (Exception ignored) {}
+
+                    final String finalErrorMsg = errorMsg;
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, finalErrorMsg, Toast.LENGTH_LONG).show());
                 }
 
                 conn.disconnect();
