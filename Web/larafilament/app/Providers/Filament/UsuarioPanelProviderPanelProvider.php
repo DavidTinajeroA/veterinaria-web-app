@@ -26,7 +26,7 @@ class UsuarioPanelProviderPanelProvider extends PanelProvider
             ->id('usuario')
             ->path('usuario')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#FFEA00',
             ])
             ->discoverResources(in: app_path('Filament/Usuario/Resources'), for: 'App\\Filament\\UsuarioPanelProvider\\Resources')
             ->discoverPages(in: app_path('Filament/Usuario/Pages'), for: 'App\\Filament\\UsuarioPanelProvider\\Pages')

@@ -26,7 +26,7 @@ class VeterinarioPanelProvider extends PanelProvider
             ->id('veterinario')
             ->path('veterinario')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#FFEA00',
             ])
             ->discoverResources(in: app_path('Filament/Veterinario/Resources'), for: 'App\\Filament\\Veterinario\\Resources')
             ->discoverPages(in: app_path('Filament/Veterinario/Pages'), for: 'App\\Filament\\Veterinario\\Pages')
